@@ -1,13 +1,13 @@
 # 设备采集程序仿写检查清单（checklist.md）
 
 > **用法**：对照 SKILL 五步写完程序后，**逐条勾选**；任何"不确定"必须停下来查（对照 `address/` 速查 → 编译 → 模拟器跑通）。**不确定 ≠ 通过。**
-> **关联**：`SKILL.md`（方法论）、`address/`（地址速查，7 协议已拆：6/17 + Beckhoff）、`examples/Program.cs`（可仿写示例，M1–M5 已编译+运行验证）。
+> **关联**：`SKILL.md`（方法论）、`address/`（地址速查）、`examples/CollectorExamples.csproj`（S7 示例）+ `examples/ModbusExample/`（Modbus 示例，均已编译+运行验证，M1–M5）。
 
 ## 0. 写代码前（5 分钟自检）
 
 - [ ] 协议路由键：`DeviceConfig` 用 **`Protocol`**（如 `siemens-s7`），**不要写 `DeviceType`**（被 `MultiDeviceOrchestrator` 独占为业务壳类名——examples/Program.cs 与官方示例 FleetS7 注释实证）；
 - [ ] 授权边界：≤10 台免费版可用（官方免费版额度）；>10 台走正式授权；**禁止复制官方示例中的演示授权路径**（授权门禁要求）；
-- [ ] 目标可达：IP / 端口 / 型号确认（模拟器或真实 PLC）。
+- [ ] 目标可达：IP / 端口 / 型号确认；**模拟器必须 `--stay-alive` 常驻**（headless 默认启动即退，实测踩坑）；
 
 ## 1. 连接与初始化（M1）
 
@@ -60,6 +60,7 @@
 |------|-----------|------|
 | `T0.0`/`C0.0` 位操作失败 | S7 T/C **仅字** | `address/s7.md` |
 | 按 `40001` 写、读到的不是"寄存器 1" | **40001 式未实现**（HSL 按纯偏移解析） | `address/modbus.md` |
+| Modbus 写 `HR100`/`COIL1` 报**地址解析失败** | 文本前缀两条路径都不可用（自研=纯数字寄存器索引；HSL=纯数字/富地址） | `address/modbus.md` §〇 三栈差异 |
 | `X010` 与 `X10` 值不同 | MC X/Y 以 0 开头按 **8 进制** | `address/mc.md` |
 | `CIO100.03` 按 103 读 | Omron 位 = **字×16+位号**（=1603） | `address/omron.md` |
 | CV 机上 DR/TIM/CNT 值错 | CV/非 CV 偏移不同（型号选错） | `address/omron.md` |

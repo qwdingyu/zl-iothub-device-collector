@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Modbus 采集示例（SKILL 使用验证：第二个协议示例）
+    用户视角验证"照着 SKILL 写 Modbus 采集"是否丝滑。
+    自研驱动路径（MultiDeviceOrchestrator + Protocol=modbus-tcp）只需核心包 ZL.IotHub：
+    文本前缀地址 COIL/HR 由自研 PlcAddressHelper 解析（AddressParsingComprehensiveTests 实证）。
+    ⚠️ 若改用 HSL 统一驱动（HslDriverFactory，需另引 ZL.IotHub.X），地址须为纯数字/富地址
+       （HSL 客户端 ModbusAddress.Parse 不认 COIL/HR 前缀）—— 见 address/modbus.md。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>ZL.IotHub.ModbusExample</AssemblyName>
+    <RootNamespace>ZL.IotHub.ModbusExample</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZL.IotHub" Version="2.2.12" />
+  </ItemGroup>
+
+</Project>

@@ -10,15 +10,19 @@
 |------|------|
 | `SKILL.md` | 5 步工作流（连接初始化 → 标签与地址 → 批量读取 → 消息质量 → 写值与清理） |
 | `address/` | **17 协议地址速查**（四维检查法：进制 / 临界值 / 位寻址模式 / 仅字位）——地址错 = 现场灾难，必须先查再写 |
-| `examples/` | 可编译、可运行的采集示例（M1–M5 全流程，模拟器验证过：连接 / 批量读 / 变更事件+质量码 / typed 写值回读） |
+| `examples/` | 可编译、可运行的采集示例（M1–M5 全流程，模拟器验证过：连接 / 批量读 / 变更事件+质量码 / typed 写值回读）—— `CollectorExamples.csproj`（S7）+ `ModbusExample/`（Modbus） |
 | `checklist.md` | 仿写后逐条勾选的验收清单（含高频地址陷阱速查） |
 
 ## 快速开始（一条命令跑通最小采集）
 
-前置：.NET 8 SDK；S7 仿真器或真实 PLC 可达（示例默认连 `127.0.0.1:2002`）。
+前置：.NET 8 SDK；仿真器**必须常驻**（`--headless --stay-alive`，缺 `--stay-alive` 服务 1 秒即退）或真实 PLC 可达。
 
 ```bash
+# S7 示例（默认连 127.0.0.1:2002；S7 模拟器先起，如 --protocols siemens-s7 --ports s7=2002 --headless --stay-alive --auto-start）
 dotnet run --project examples/CollectorExamples.csproj
+
+# Modbus 示例（默认连 127.0.0.1:31502；Modbus 模拟器：--protocols modbus-tcp --ports modbus=31502 --headless --stay-alive --auto-start）
+dotnet run --project examples/ModbusExample/ModbusExample.csproj
 ```
 
 输出应包含：连接成功、`DataCollected` 快照（每周期标签值，类型保真）、变更事件（含质量码）、typed 写值后读回生效。
@@ -26,8 +30,8 @@ dotnet run --project examples/CollectorExamples.csproj
 ## 仿写路径
 
 1. 读 `SKILL.md`（5 步）；
-2. 写标签表前先查 `address/<协议>.md`（地址四维核对）；
-3. 抄 `examples/Program.cs` 的结构（引擎批量读 + 事件拿值，不要逐标签轮询）；
+2. 写标签表前先查 `address/<协议>.md`（地址四维核对；Modbus 先看「〇、三栈差异」）；
+3. 抄 `examples/` 对应协议示例的结构（引擎批量读 + 事件拿值，不要逐标签轮询）；
 4. 写完逐条过 `checklist.md`。
 
 ## 授权

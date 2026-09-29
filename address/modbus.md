@@ -3,6 +3,19 @@
 > **来源**：docs/189 §3（地址格式）+ §21.2（边界规则），基于 `ModbusAddress.Parse` 的地址格式事实。
 > ⚠️ **本协议第一大坑**：HSL 的 Modbus 地址解析**不识别行业常见的 `40001 / 4X / HR` 写法**——纯数字就是**字节偏移**（§3.5/§21.2，源码依据 `ParseAddressHelper`）。
 
+## 〇、三栈差异（2026-09-29 使用验证实测补充 — 先看这个）
+
+Modbus 地址在 ZL.IotHub 里有 **两条可用路径 + 一类品牌扩展**，语义**互不相同**：
+
+| 路径 | 地址形式 | 示例 | 说明 |
+|------|---------|------|------|
+| **自研 `ModbusTcpDriver`**（`Protocol=modbus-tcp`，编排器路由，示例默认） | 纯数字寄存器索引（0-based），线圈/寄存器同空间 | `"0"`（线圈 0）/ `"100"`（寄存器 100） | `StandardModbusAddressMapper`；**examples/ModbusExample 用此，交叉测试全绿** |
+| **HSL 客户端**（`HslDriverFactory`，`ZL.IotHub.X` 包） | 纯数字偏移 / 富地址 `s=;x=;addr` | `"100"` / `"s=1;x=3;100"` | `ModbusAddress.Parse`；与上一条"纯数字"**语义边界不同**（见 §1.2） |
+| **品牌子类**（汇川 `InovanceTcpDriver`、信捷等） | 符号地址（D/M/X/Y/COIL/HR…） | `"D100"` / `"COIL1"` | 子类注入 `AddressMapper` 实现，通用驱动**不认** |
+
+⚠️ **文本前缀（`COIL1`/`HR100`/`4X0010`）在自研通用驱动与 HSL 客户端两条路径上都「地址解析失败」**（实测：写 `"HR100"` 报 `地址解析失败: HR100`）——它只是行业习惯写法（§1.1 参考用），**不是可用的驱动地址**。
+⚠️ 官方 `demos/ZL.IotHub.Demo.ModbusUnified`（`HslDriverFactory` + `COIL1`/`HR100`）**从未跑通**（其自身注释承认长期编译不过；补包后仍会地址解析失败）——**不要照抄该 demo 的地址**，改抄 `examples/ModbusExample`。
+
 ## 一、地址形式（§3）
 
 ### 1.1 行业习惯写法（⚠️ HSL 解析**不实现**，仅在与其他栈互通时参考）

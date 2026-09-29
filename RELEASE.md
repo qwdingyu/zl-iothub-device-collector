@@ -20,8 +20,10 @@ git push origin v1.0.0      # 触发 Actions build
 
 | 版本 | 内容 |
 |------|------|
-| （占位） | — |
+| v1.0.1 | **Modbus 使用验证迭代**：新增 `examples/ModbusExample`（第二协议示例，编译+模拟器运行验证 M1–M5 闭环）；修 `address/modbus.md`（补「〇、三栈差异」：自研驱动=纯数字寄存器索引 / HSL=纯数字+富地址 / 文本前缀两路径均不可用——官方 ModbusUnified demo 的 `COIL/HR + HslDriverFactory` 组合实测「地址解析失败」）；SKILL/README/checklist 补模拟器 `--stay-alive` 常驻要点 + 事件双入口 + CI 编译双示例 |
+| v1.0.0 | 首个发布：SKILL 5 步方法论 + address 9 协议速查 + examples（S7 全流程验证）+ checklist + MIT 开源门面 + CI |
 
 ## Changelog
 
-- （占位）
+- v1.0.1（2026-09-29）：Modbus 使用验证迭代（见版本对照）。
+- v1.0.0（2026-09-29）：首个发布。

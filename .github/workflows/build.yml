@@ -21,4 +21,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - name: Build examples
-        run: dotnet build examples/CollectorExamples.csproj -c Debug --nologo
+        run: |
+          dotnet build examples/CollectorExamples.csproj -c Debug --nologo
+          dotnet build examples/ModbusExample/ModbusExample.csproj -c Debug --nologo

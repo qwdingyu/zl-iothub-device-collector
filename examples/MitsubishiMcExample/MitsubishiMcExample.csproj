@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    三菱 MC 采集示例（SKILL 使用验证：第三个协议示例）
+    用户视角验证"照着 SKILL 写 Mitsubishi MC 采集"是否丝滑。
+    自研驱动路径（MultiDeviceOrchestrator + Protocol=melsec-mc）只需核心包 ZL.IotHub：
+    MC 地址天然符号化（D100/M100/X0…），自研与 HSL 语义一致（与 Modbus 的纯数字不同）。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>ZL.IotHub.MitsubishiMcExample</AssemblyName>
+    <RootNamespace>ZL.IotHub.MitsubishiMcExample</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZL.IotHub" Version="2.2.13" />
+  </ItemGroup>
+
+</Project>

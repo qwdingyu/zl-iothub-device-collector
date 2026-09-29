@@ -1,7 +1,8 @@
 name: build
 
 # 独立仓库 CI：编译 examples（用户视角 nuget 引用），确保 SKILL 指引的 API 可编译。
-# 运行验证（需模拟器）不在 CI：examples/Program.cs 已在本机经 S7Simulator 验证（M1-M5）。
+# 每个协议示例一个独立工程：examples/CollectorExamples/（S7）、examples/ModbusExample/、examples/MitsubishiMcExample/。
+# 运行验证（需模拟器）不在 CI：三个示例均已在本机经 PlcSimulator 验证（M1-M5 闭环）。
 
 on:
   push:
@@ -22,5 +23,6 @@ jobs:
           dotnet-version: '8.0.x'
       - name: Build examples
         run: |
-          dotnet build examples/CollectorExamples.csproj -c Debug --nologo
+          dotnet build examples/CollectorExamples/CollectorExamples.csproj -c Debug --nologo
           dotnet build examples/ModbusExample/ModbusExample.csproj -c Debug --nologo
+          dotnet build examples/MitsubishiMcExample/MitsubishiMcExample.csproj -c Debug --nologo

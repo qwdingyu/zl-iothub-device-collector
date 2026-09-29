@@ -1,11 +1,11 @@
 # 设备采集程序仿写检查清单（checklist.md）
 
 > **用法**：对照 SKILL 五步写完程序后，**逐条勾选**；任何"不确定"必须停下来查（对照 `address/` 速查 → 编译 → 模拟器跑通）。**不确定 ≠ 通过。**
-> **关联**：`SKILL.md`（方法论）、`address/`（地址速查）、`examples/CollectorExamples.csproj`（S7 示例）+ `examples/ModbusExample/`（Modbus 示例，均已编译+运行验证，M1–M5）。
+> **关联**：`SKILL.md`（方法论）、`address/`（地址速查）、`examples/CollectorExamples/`（S7 示例）+ `examples/ModbusExample/`（Modbus）+ `examples/MitsubishiMcExample/`（MC 示例，均已编译+运行验证，M1–M5）。
 
 ## 0. 写代码前（5 分钟自检）
 
-- [ ] 协议路由键：`DeviceConfig` 用 **`Protocol`**（如 `siemens-s7`），**不要写 `DeviceType`**（被 `MultiDeviceOrchestrator` 独占为业务壳类名——examples/Program.cs 与官方示例 FleetS7 注释实证）；
+- [ ] 协议路由键：`DeviceConfig` 用 **`Protocol`**（如 `siemens-s7`），**不要写 `DeviceType`**（被 `MultiDeviceOrchestrator` 独占为业务壳类名——examples/CollectorExamples/Program.cs 与官方示例 FleetS7 注释实证）；
 - [ ] 授权边界：≤10 台免费版可用（官方免费版额度）；>10 台走正式授权；**禁止复制官方示例中的演示授权路径**（授权门禁要求）；
 - [ ] 目标可达：IP / 端口 / 型号确认；**模拟器必须 `--stay-alive` 常驻**（headless 默认启动即退，实测踩坑）；
 
@@ -24,7 +24,7 @@
 
 ## 3. 数据读取（M3）
 
-- [ ] 批量读取走引擎：标签表 → `DeviceRoot` → **`DataCollected` 快照**拿值（examples/Program.cs 实证；快照每轮读取完成触发，值稳定也触发）；
+- [ ] 批量读取走引擎：标签表 → `DeviceRoot` → **`DataCollected` 快照**拿值（examples/CollectorExamples/Program.cs 实证；快照每轮读取完成触发，值稳定也触发）；
 - [ ] **不要**逐标签 `ReadAsync`（`device.ReadAsync<T>(address)` 是**单点诊断**用）；
 - [ ] 多设备/多协议 → `MultiDeviceOrchestrator`（全局连接限流 + 并发启动 + 优雅停止）。
 
@@ -44,13 +44,13 @@
 ## 6. 资源与生命周期（M5）
 
 - [ ] 取消订阅（`TagChanges -=` / `DataCollected -=`）；
-- [ ] 优雅停止顺序：先 `StopAsync`（停数据流）→ 再取消订阅/释放（examples/Program.cs 顺序）；
+- [ ] 优雅停止顺序：先 `StopAsync`（停数据流）→ 再取消订阅/释放（examples/CollectorExamples/Program.cs 顺序）；
 - [ ] `Dispose` / 释放连接。
 
 ## 7. 最终验收（必过；一项不过 = 不算完成）
 
 - [ ] `dotnet build` **0 errors / 0 warnings**；
-- [ ] 模拟器（S7Simulator / PlcSimulatorFixture）**跑通**：连接成功、读值类型保真、**写生效读回**、事件+质量码触发（= examples/Program.cs 已验证的闭环）；
+- [ ] 模拟器（S7Simulator / PlcSimulatorFixture）**跑通**：连接成功、读值类型保真、**写生效读回**、事件+质量码触发（= examples/CollectorExamples/Program.cs 已验证的闭环）；
 - [ ] 授权合规（>10 台正式授权；README 声明免费版边界）；
 - [ ] 资源清理完整（订阅/事件/连接全释放）。
 

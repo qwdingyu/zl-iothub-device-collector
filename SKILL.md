@@ -28,7 +28,7 @@ description: 编写 ZL.IotHub 设备采集 C# 程序的可仿写方法论。覆�
 - [ ] 引用 `ZL.IotHub` / `ZL.Tag`；
 - [ ] 定连接常量：`ConnectTimeout` / `ReceiveTimeout` / `ReadInterval` / 合并参数 `MaxGap` / `MaxBlockSize`（参考值：8s / 5s / 300ms / 50 / 220）；
 - [ ] 授权初始化：免费版 10 台内直接可用；**>10 台必须走正式授权——禁止复制官方示例中的演示授权路径进产品代码**（授权门禁要求）。
-- 📎 参考：`examples/CollectorExamples.csproj`（S7，M1+M3 合并示例）、`examples/ModbusExample/`（Modbus）——均已编译 + 模拟器运行验证；官方示例 FleetS7（连接常量区）。
+- 📎 参考：`examples/CollectorExamples/`（S7，M1+M3 合并示例）、`examples/ModbusExample/`（Modbus）、`examples/MitsubishiMcExample/`（三菱 MC）——均已编译 + 模拟器运行验证；官方示例 FleetS7（连接常量区）。
 
 ### 第 2 步 · 标签表与地址维护（M2）—— ⚠️ 地址错 = 现场灾难
 
@@ -44,8 +44,8 @@ description: 编写 ZL.IotHub 设备采集 C# 程序的可仿写方法论。覆�
 - [ ] 多设备/多协议：用 `MultiDeviceOrchestrator`（编排 + 全局连接限流 + 并发启动 + 优雅停止）；
 - [ ] **单驱动极简入口**：`HslDriverFactory.Create(cfg)`（驻 `ZL.IotHub.X` 包，另引 NuGet）可一行创建
        HSL 统一驱动；⚠️ **地址语义与自研驱动不同**（HSL 客户端不认 COIL/HR 文本前缀，见 address/modbus.md「三栈差异」）——
-       两个 examples 均走自研驱动路径（地址更简单可靠）。
-- 📎 参考：`examples/CollectorExamples`（S7，DataCollected 模式）、`examples/ModbusExample`（Modbus，纯数字寄存器地址）——均已编译 + 模拟器运行验证。
+       三个 examples 均走自研驱动路径（地址更简单可靠）。
+- 📎 参考：`examples/CollectorExamples/`（S7，DataCollected 模式）、`examples/ModbusExample/`（Modbus，纯数字寄存器地址）、`examples/MitsubishiMcExample/`（MC，符号地址）——均已编译 + 模拟器运行验证。
 
 ### 第 4 步 · 消息与质量（M4）
 
@@ -73,6 +73,7 @@ description: 编写 ZL.IotHub 设备采集 C# 程序的可仿写方法论。覆�
    ⚠️ **三栈差异**：自研 `ModbusTcpDriver` = 纯数字寄存器索引（0-based）；HSL 客户端 = 纯数字/富地址（`s=;x=;addr`）；
    文本前缀（COIL/HR/DI）两条路径**都不可用**（仅品牌子类 AddressMapper 支持）——详见 address/modbus.md；
 - MC：X/Y/DX/DY 以 0 开头按 **8 进制**；S*/C*/T* 子类型白名单（写错抛异常）；
+   ⚠️ **线序小端 + 批量位区缺口**：2.2.12 端序声明错误已在 2.2.13 修正（值错位先升版）；批量引擎不支持 MC 位区标签（M 区不出值，走 ReadBool 直读，docs/213 遗留#3）；
 - Omron：`字*16+bit`；CV 与非 CV 的 DR/AR/TIM/CNT 偏移不同；EM 银行号 16 进制；
 - AB：`N7:0/5` 位访问；ST 字符串头=[MaxLen,ActualLen]；
 - Keyence：R/CR/MR/LR **16 进制位压缩**（`high*16+low`）；

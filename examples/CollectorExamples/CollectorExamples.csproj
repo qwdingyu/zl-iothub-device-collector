@@ -15,15 +15,7 @@
 
   <ItemGroup>
     <!-- 免费版 10 台内即可运行；>10 台走正式授权（docs/193 口径） -->
-    <PackageReference Include="ZL.IotHub" Version="2.2.12" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- 排除并联示例工程（examples/ModbusExample/ 是独立工程，有独立入口）：
-         SDK 默认 glob 会把子目录 *.cs 收编进本工程，引起 CS0017 重复入口。 -->
-    <Compile Remove="ModbusExample/**" />
-    <Content Remove="ModbusExample/**" />
-    <None Remove="ModbusExample/**" />
+    <PackageReference Include="ZL.IotHub" Version="2.2.13" />
   </ItemGroup>
 
 </Project>

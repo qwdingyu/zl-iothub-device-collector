@@ -1,0 +1,9 @@
+# 独立仓库 .gitignore（本目录可整体拷出为独立 GitHub 仓库）
+bin/
+obj/
+.vs/
+*.user
+.DS_Store
+TestResults/
+*.nupkg
+artifacts/

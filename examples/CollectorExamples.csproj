@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ZL.IotHub 设备采集示例（SKILL zl-iothub-device-collector 的 M1+M3 验证工程）
+    以「用户视角」引用已发布的 nuget 包（非项目引用），验证 SKILL 指引的 API 对真实消费者可用。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>ZL.IotHub.CollectorExamples</AssemblyName>
+    <RootNamespace>ZL.IotHub.CollectorExamples</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 免费版 10 台内即可运行；>10 台走正式授权（docs/193 口径） -->
+    <PackageReference Include="ZL.IotHub" Version="2.2.12" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,24 @@
+name: build
+
+# 独立仓库 CI：编译 examples（用户视角 nuget 引用），确保 SKILL 指引的 API 可编译。
+# 运行验证（需模拟器）不在 CI：examples/Program.cs 已在本机经 S7Simulator 验证（M1-M5）。
+
+on:
+  push:
+    paths:
+      - 'examples/**'
+      - '.github/workflows/build.yml'
+  pull_request:
+    paths:
+      - 'examples/**'
+
+jobs:
+  build-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build examples
+        run: dotnet build examples/CollectorExamples.csproj -c Debug --nologo
